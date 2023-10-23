@@ -29,7 +29,7 @@ CREATE TABLE "classes" (
 
 CREATE TABLE "students" (
 	"name"	TEXT NOT NULL UNIQUE,
-	"subjects"	BLOB NOT NULL,
+	"subjects"	TEXT NOT NULL,
 	"ID"	TEXT NOT NULL UNIQUE,
 	"fees"	INTEGER,
 	FOREIGN KEY("name") REFERENCES "users"("username"),
