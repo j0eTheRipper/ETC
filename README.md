@@ -15,4 +15,4 @@ This file contains all the data concerning your school, so **DON'T delete it unl
 
 ### To add your changes:
 1. commit and push
-2. go to github.com and add a pull request.
+2. go to github.com and add a pull request..
