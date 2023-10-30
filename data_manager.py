@@ -15,6 +15,7 @@ def __generate_new_user_query(username: str, password: str, role: str):
 
 
 def add_student(username: str, password: str, subjects: set, icad: str, fees: int = 0):
+    """adds a new student. used by receptionist"""
     if len(subjects) > 3:
         print("Up to 3 subjects allowed!")
         return
@@ -42,6 +43,7 @@ def validate_subjects(cursor, subjects):
 
 
 def add_tutor(username, password, assigned_subject: str):
+    """Adds a new tutor. Used by receptionist"""
     database = sqlite3.connect('data.sqlite')
     cursor = database.cursor()
 
@@ -57,6 +59,7 @@ def add_tutor(username, password, assigned_subject: str):
 
 
 def add_receptionist(username, password, role):
+    """Adds new receptionist to the database. Used by admin"""
     new_user, _ = __generate_new_user_query(username, password, role)
     database = sqlite3.connect("data.sqlite")
     cursor = database.cursor()
@@ -65,8 +68,22 @@ def add_receptionist(username, password, role):
     database.close()
 
 
-def remove_user(username: str = '', icad: str = ''):
-    pass
+def remove_user(username: str = ''):
+    """deletes user from the database."""
+    database = sqlite3.connect("data.sqlite")
+    cursor = database.cursor()
+
+    role = cursor.execute(f'SELECT role FROM users WHERE username="{username};').fetchone()
+    if role:
+        role = role[0]
+        if role == "tutor":
+            cursor.execute(f'DELETE FROM classes WHERE tutor="{username};')
+            cursor.execute(f'DELETE FROM tutors WHERE name="{username};')
+        elif role == "student":
+            cursor.execute(f'DELETE FROM students WHERE name="{username}";')
+        cursor.execute(f'DELETE FROM users WHERE username={username};')
+    else:
+        return False
 
 
 def init_db():
@@ -94,3 +111,16 @@ def init_db():
     username: defaultadmin
     password: pleasechange123
     """)
+
+
+def login(username, password):
+    """Returns the user's role if the password was correct. otherwise returns 'wrong password'"""
+    db = sqlite3.connect('data.sqlite')
+    cursor = db.cursor()
+    username = ''.join(username.lower)
+    user_info = cursor.execute(f'SELECT * FROM users WHERE username="{username}"').fetchone()
+    if user_info:
+        if password == user_info[1]:
+            return user_info[2]
+        return 'wrong password'
+    return 'wrong username'
