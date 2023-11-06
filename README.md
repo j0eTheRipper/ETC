@@ -16,3 +16,9 @@ This file contains all the data concerning your school, so **DON'T delete it unl
 ### To add your changes:
 1. commit and push
 2. go to github.com and add a pull request..
+
+## data_management module.
+1. `login(username, password)` takes the username and the password and returns the user's role. if the user's credentials are wrong, the function returns `False`
+2. `add_student(name, password, subjects, icad, fees)` adds a new student to the database.
+3. `add_tutor(name, password, subjects)` adds a new tutor.
+4. add_receptionist

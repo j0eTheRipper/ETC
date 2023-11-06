@@ -99,6 +99,18 @@ def view_all(role=''):
     return users
 
 
+def change_profile(username, new_username='', new_password=''):
+    database = sqlite3.connect('data.sqlite')
+    cursor = database.cursor()
+    if new_username:
+        cursor.execute(f'UPDATE users SET username="{new_username}" WHERE username="{username}"')
+    if new_password:
+        cursor.execute(f'UPDATE users SET password="{new_password}" WHERE username="{username}"')
+
+    database.commit()
+    database.close()
+
+
 def init_db():
     """Deletes the current database and creates a new one, and makes a default admin"""
     if os.path.exists("data.sqlite"):
@@ -130,7 +142,7 @@ def login(username, password):
     """Returns the user's role if the password was correct. otherwise returns 'wrong password'"""
     db = sqlite3.connect('data.sqlite')
     cursor = db.cursor()
-    username = ''.join(username.lower)
+    username = ''.join(username.lower())
     user_info = cursor.execute(f'SELECT * FROM users WHERE username="{username}"').fetchone()
     if user_info:
         if password == user_info[1]:

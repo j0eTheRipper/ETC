@@ -13,6 +13,8 @@ CREATE TABLE "subjects" (
 CREATE TABLE "tutors" (
 	"name"	TEXT NOT NULL UNIQUE,
 	"subject"	TEXT NOT NULL,
+	"level"	TEXT NOT NULL,
+	"salary" INTEGER NOT NULL,
 	FOREIGN KEY("subject") REFERENCES "subjects"("subject"),
 	FOREIGN KEY("name") REFERENCES "users"("username")
 );
@@ -21,6 +23,7 @@ CREATE TABLE "classes" (
 	"class-id"	INTEGER NOT NULL UNIQUE,
 	"subject"	TEXT NOT NULL,
 	"tutor"	TEXT NOT NULL,
+	"level"	TEXT NOT NULL,
 	"time"	TEXT NOT NULL,
 	FOREIGN KEY("subject") REFERENCES "subjects"("subject"),
 	PRIMARY KEY("class-id" AUTOINCREMENT),
@@ -30,6 +33,7 @@ CREATE TABLE "classes" (
 CREATE TABLE "students" (
 	"name"	TEXT NOT NULL UNIQUE,
 	"subjects"	TEXT NOT NULL,
+	"level"	TEXT NOT NULL,
 	"ID"	TEXT NOT NULL UNIQUE,
 	"fees"	INTEGER,
 	FOREIGN KEY("name") REFERENCES "users"("username"),
