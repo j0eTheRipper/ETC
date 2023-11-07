@@ -112,7 +112,7 @@ def change_profile(username, new_username='', new_password=''):
 
 
 def init_db():
-    """Deletes the current database and creates a new one, and makes a default admin"""
+    """Deletes the current database and creates a new one, and makes a default admin account"""
     if os.path.exists("data.sqlite"):
         os.remove("data.sqlite")
 
