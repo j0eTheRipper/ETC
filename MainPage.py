@@ -1,6 +1,5 @@
 import MainSystemMenus as SystemMenus
 from data_manager import *
-from Admin import  tutors_managemnt as Tutor
 
 
 SystemMenus.loginMenu()
@@ -12,7 +11,7 @@ user_data = login(userName, password)
 
 if user_data:
     if user_data == 'tutor':
-        SystemMenus.TutorManagementMenu()
+        print('helloooooooo')
     elif user_data == 'reciption':
         SystemMenus.ReceptionManagementMenu()
     elif user_data == 'admin':
