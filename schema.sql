@@ -13,7 +13,7 @@ CREATE TABLE "subjects" (
 CREATE TABLE "tutors" (
 	"name"	TEXT NOT NULL UNIQUE,
 	"subject"	TEXT NOT NULL,
-	"level"	TEXT NOT NULL,
+	"level"	INTEGER NOT NULL,
 	"salary" INTEGER NOT NULL,
 	FOREIGN KEY("subject") REFERENCES "subjects"("subject"),
 	FOREIGN KEY("name") REFERENCES "users"("username")

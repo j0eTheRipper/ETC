@@ -42,7 +42,7 @@ def validate_subjects(cursor, subjects):
     return True
 
 
-def add_tutor(username, password, assigned_subject: str):
+def add_tutor(username, password, assigned_subject: str, level, salary):
     """Adds a new tutor. Used by receptionist"""
     database = sqlite3.connect('data.sqlite')
     cursor = database.cursor()
@@ -51,7 +51,7 @@ def add_tutor(username, password, assigned_subject: str):
         return
 
     new_user, username = __generate_new_user_query(username, password, "tutor")
-    new_tutor = f'INSERT INTO tutors (name, subject) VALUES ("{username}", "{assigned_subject}");'
+    new_tutor = f'INSERT INTO tutors (name, subject, level, salary) VALUES ("{username}", "{assigned_subject}", {level}, {salary});'
     cursor.execute(new_user)
     cursor.execute(new_tutor)
     database.commit()
