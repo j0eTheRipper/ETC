@@ -11,7 +11,7 @@ user_data = login(userName, password)
 
 if user_data:
     if user_data == 'tutor':
-        print('hellooooooooo')
+        print('helloooooooo')
     elif user_data == 'reciption':
         SystemMenus.ReceptionManagementMenu()
     elif user_data == 'admin':
