@@ -14,7 +14,7 @@ def __generate_new_user_query(username: str, password: str, role: str):
     return f'INSERT INTO users (username, password, role) VALUES ("{username}", "{password}", "{role}");', username
 
 
-def add_student(username: str, password: str, subjects: set, icad: str, fees: int = 0):
+def add_student(username: str, password: str, subjects: set, level: int, icad: str, fees: int = 0):
     """adds a new student. used by receptionist"""
     if len(subjects) > 3:
         print("Up to 3 subjects allowed!")
@@ -26,8 +26,8 @@ def add_student(username: str, password: str, subjects: set, icad: str, fees: in
         return
 
     new_user = __generate_new_user_query(username, password, "student")
-    new_student = f'INSERT INTO students (name, ID, subjects, fees) \
-    VALUES ("{new_user[1]}", "{icad}", "{"-".join(list(subjects))}", {fees});'
+    new_student = f'INSERT INTO students (name, ID, subjects, level, fees) \
+    VALUES ("{new_user[1]}", "{icad}", "{"-".join(list(subjects))}", {level}, {fees});'
     cursor.execute(new_user[0])
     cursor.execute(new_student)
     database.commit()
@@ -97,6 +97,21 @@ def view_all(role=''):
 
     database.close()
     return users
+
+
+def view_all_students(tutor=''):
+    database = sqlite3.connect('data.sqlite')
+    cursor = database.cursor()
+    tutor_info = cursor.execute(f'SELECT subject, level FROM tutors WHERE name="{tutor}";').fetchone()
+    subject = tutor_info[0]
+    level = tutor_info[1]
+
+    if tutor:
+        student_list = cursor.execute(f'SELECT name FROM students WHERE subjects LIKE "%{subject}%" and level={level};').fetchall()
+    else:
+        student_list = cursor.execute(f'SELECT name FROM students;').fetchall()
+
+    return [i[0] for i in student_list]
 
 
 def change_profile(username, new_username='', new_password=''):

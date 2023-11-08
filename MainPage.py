@@ -2,7 +2,7 @@ import MainSystemMenus as SystemMenus
 from data_manager import *
 
 
-SystemMenus.loginMenu()
+SystemMenus.login_menu()
 
 userName = input("Enter Your Username:\n")
 password = input("Enter Your Password:\n")
@@ -11,28 +11,28 @@ user_data = login(userName, password)
 
 if user_data:
     if user_data == 'tutor':
-        SystemMenus.classmenu()
-        choice= int(input('Please select an option: '))
-        match choice:#submenu
+        SystemMenus.class_menu()
+        choice = int(input('Please select an option: '))
+        match choice:
             case 1:
-                SystemMenus.subclassinfo()
+                SystemMenus.sub_class_info()
             case 2:
-                SystemMenus.subupdateclass()
+                SystemMenus.sub_update_class()
             case 3:
-                print('Students under your class:') #not finished
+                print('Students under your subject: ')
             case 4:
-                username= input('Enter old username: ')
-                new_username= input('Enter new username: ')
-                new_password= input('Enter new password: ')
-                change_profile(username, new_username, new_password) #not finished
-    elif user_data == 'reciption':
-        SystemMenus.ReceptionManagementMenu()
+                username = input('Enter old username: ')
+                new_username = input('Enter new username: ')
+                new_password = input('Enter new password: ')
+                change_profile(username, new_username, new_password)
+    elif user_data == 'receptionist':
+        SystemMenus.receptionist_main_menu()
     elif user_data == 'admin':
-        SystemMenus.AdminMenu()
+        SystemMenus.admin_menu()
         print("Please Select Option:\n")
         option = input()
         if option == '1':
-            SystemMenus.TutorManagementMenu()
+            SystemMenus.tutor_management_menu()
             print("Please Select Option:\n")
             suboption = input()
             if suboption == "1":
@@ -46,17 +46,4 @@ if user_data:
 
 
         elif option == '2':
-            SystemMenus.ReceptionManagementMenu()
-
-
-
-
-
-
-
-
-
-
-
-
-
+            SystemMenus.receptionist_management_menu()

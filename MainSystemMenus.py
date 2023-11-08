@@ -1,40 +1,35 @@
-
-
-
-def loginMenu():
+def login_menu():
     print("*********************************************************")
     print("****                  Login Page                     ****")
 
 
-def AdminMenu():
+def admin_menu():
     print("*********************************************************")
     print("****                 Admin Menu                      ****")
     print("1- Tutor Management")
     print("2- Reception Management")
 
-def TutorManagementMenu():
+
+def tutor_management_menu():
     print("*********************************************************")
     print("****                 Tutor Menu                      ****")
     print("1- Register New Tutor")
     print("2- Delete Tutor")
 
-def ReceptionManagementMenu():
+
+def receptionist_management_menu():
     print("*********************************************************")
     print("1- Register New Reception")
     print("2- Delete Reception")
 
-def ProfileManagementMenu():
-    print("*********************************************************")
-    print("1- Update own profile ")
 
-
-
-def IncomeManagementMenu():
+def income_management_menu():
     print("*********************************************************")
     print("1-level")
     print("2-subject")
 
-def classmenu():
+
+def class_menu():
     print('***********************************************')
     print('****              Tutor Menu               ****')
     print('1. Add new class')
@@ -42,10 +37,23 @@ def classmenu():
     print('3. View list of students')
     print('4. Update my profile')
 
-def subclassinfo():
+
+def sub_class_info():
     print('***********************************************')
     print('1. Class title \n2. Set time and date')
 
-def subupdateclass():
+
+def sub_update_class():
     print('***********************************************')
     print('1. Update Class \n2. Delete Class')
+
+
+def receptionist_main_menu():
+    print('***********************************************')
+    print('***            Receptionist Menu            ***')
+    print("""1) Add student
+    2) Remove student
+    3) View student requests
+    4) View student financial status
+    5) Update profile
+    """)
