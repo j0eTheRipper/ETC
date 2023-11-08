@@ -14,6 +14,6 @@ elif role == 'student':
     """Ammar writes menu for student"""
 elif role == 'receptionist':
     """Youssef writes menu for receptionist"""
-elif role == 'student':
-    '''Adlina writes menu for student'''
+elif role == 'tutor':
+    '''Adlina writes menu for tutor'''
 

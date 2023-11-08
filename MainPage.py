@@ -11,7 +11,20 @@ user_data = login(userName, password)
 
 if user_data:
     if user_data == 'tutor':
-        print('helloooooooo')
+        SystemMenus.classmenu()
+        choice= int(input('Please select an option: '))
+        match choice:#submenu
+            case 1:
+                SystemMenus.subclassinfo()
+            case 2:
+                SystemMenus.subupdateclass()
+            case 3:
+                print('Students under your class:') #not finished
+            case 4:
+                username= input('Enter old username: ')
+                new_username= input('Enter new username: ')
+                new_password= input('Enter new password: ')
+                change_profile(username, new_username, new_password) #not finished
     elif user_data == 'reciption':
         SystemMenus.ReceptionManagementMenu()
     elif user_data == 'admin':
