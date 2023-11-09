@@ -58,7 +58,7 @@ def add_tutor(username, password, assigned_subject: str, level, salary):
     database.close()
 
 
-def add_receptionist(username, password):
+def add_receptionist(username, password: str):
     """Adds new receptionist to the database. Used by admin"""
     new_user, _ = __generate_new_user_query(username, password, "receptionist")
     database = sqlite3.connect("data.sqlite")
@@ -73,7 +73,7 @@ def remove_user(username: str = ''):
     database = sqlite3.connect("data.sqlite")
     cursor = database.cursor()
 
-    role = cursor.execute(f'SELECT role FROM users WHERE username="{username};').fetchone()
+    role = cursor.execute(f'SELECT role FROM users WHERE username="{username};"').fetchone()
     if role:
         role = role[0]
         if role == "tutor":

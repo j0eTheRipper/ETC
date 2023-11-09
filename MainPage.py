@@ -53,7 +53,21 @@ if user_data:
                 level = int(input("Enter your level:\n"))
                 salary = int(input("Enter Your Salary:\n"))
                 add_tutor(username, password, subject, level, salary)
-
-
+            elif suboption == "2":
+                username = input("Enter The Tutor You Want To delet: ")
+                remove_user(username)
+                print("The tutor Has Been Successfully Deleted:")
         elif option == '2':
             SystemMenus.receptionist_management_menu()
+            print("Select Your Option:\n")
+            option = input()
+            if option == "1":
+                username = input("Enter Your User Name:\n")
+                password = input("Enter Your Password:\n")
+                add_receptionist(username, password)
+            elif option == "2":
+               username =  print("Enter The Receptionist you Want To Delet:\n")
+               remove_user(username)
+               print("The Receptionist Has Been Seccessfully Deleted")
+
+
