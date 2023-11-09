@@ -36,6 +36,7 @@ def class_menu():
     print('2. Update class information')
     print('3. View list of students')
     print('4. Update my profile')
+    print('5. Exit')
 
 
 def sub_class_info():
@@ -47,6 +48,9 @@ def sub_update_class():
     print('***********************************************')
     print('1. Update Class \n2. Delete Class')
 
+def sub_update_profile():
+    print('***********************************************')
+    print('1. New username \n2. New Password')
 
 def receptionist_main_menu():
     print('***********************************************')

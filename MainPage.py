@@ -19,12 +19,22 @@ if user_data:
             case 2:
                 SystemMenus.sub_update_class()
             case 3:
+                tutor=userName
                 print('Students under your subject: ')
+                view_all_students(tutor) 
             case 4:
-                username = input('Enter old username: ')
-                new_username = input('Enter new username: ')
-                new_password = input('Enter new password: ')
-                change_profile(username, new_username, new_password)
+                SystemMenus.sub_update_profile()
+                opt= int(input('Enter input: '))
+                if opt==1:
+                    new_username= input('Enter new username: ')
+                elif opt==2:
+                    new_password= input('Enter new password: ')
+                else:
+                    print('Wrong input. Choose either 1 or 2')
+                change_profile(userName, new_username, new_password)
+            case 5:
+                print('Exitted succesfully.')
+                
     elif user_data == 'receptionist':
         SystemMenus.receptionist_main_menu()
     elif user_data == 'admin':
