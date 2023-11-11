@@ -1,7 +1,6 @@
 import MainSystemMenus as SystemMenus
 from data_manager import *
 
-
 SystemMenus.login_menu()
 
 userName = input("Enter Your Username:\n")
@@ -19,22 +18,22 @@ if user_data:
             case 2:
                 SystemMenus.sub_update_class()
             case 3:
-                tutor=userName
+                tutor = userName
                 print('Students under your subject: ')
-                view_all_students(tutor) 
+                view_all_students(tutor)
             case 4:
                 SystemMenus.sub_update_profile()
-                opt= int(input('Enter input: '))
-                if opt==1:
-                    new_username= input('Enter new username: ')
-                elif opt==2:
-                    new_password= input('Enter new password: ')
+                opt = int(input('Enter input: '))
+                if opt == 1:
+                    new_username = input('Enter new username: ')
+                elif opt == 2:
+                    new_password = input('Enter new password: ')
                 else:
                     print('Wrong input. Choose either 1 or 2')
                 change_profile(userName, new_username, new_password)
             case 5:
                 print('Exitted succesfully.')
-                
+
     elif user_data == 'receptionist':
         SystemMenus.receptionist_main_menu()
     elif user_data == 'admin':
@@ -66,8 +65,6 @@ if user_data:
                 password = input("Enter Your Password:\n")
                 add_receptionist(username, password)
             elif option == "2":
-               username =  print("Enter The Receptionist you Want To Delet:\n")
-               remove_user(username)
-               print("The Receptionist Has Been Seccessfully Deleted")
-
-
+                username = input("Enter The Receptionist you Want To Delet:\n")
+                remove_user(username)
+                print("The Receptionist Has Been Seccessfully Deleted")
