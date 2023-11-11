@@ -73,7 +73,7 @@ def remove_user(username: str = ''):
     database = sqlite3.connect("data.sqlite")
     cursor = database.cursor()
 
-    role = cursor.execute(f'SELECT * FROM users WHERE username="{username}";').fetchall()
+    role = cursor.execute(f'SELECT role FROM users WHERE username="{username}";').fetchone()
     if role:
         role = role[0]
         if role == "tutor":
@@ -84,6 +84,9 @@ def remove_user(username: str = ''):
         cursor.execute(f'DELETE FROM users WHERE username="{username}";')
     else:
         return False
+
+    database.commit()
+    database.close()
 
 
 def view_all(role=''):
