@@ -26,14 +26,12 @@ if user_data:
                 opt = int(input('Enter input: '))
                 if opt == 1:
                     new_username = input('Enter new username: ')
+                    change_profile(userName, new_username=new_username)
                 elif opt == 2:
                     new_password = input('Enter new password: ')
+                    change_profile(userName, new_password=new_password)
                 else:
                     print('Wrong input. Choose either 1 or 2')
-                change_profile(userName, new_username, new_password)
-            case 5:
-                print('Exitted succesfully.')
-
     elif user_data == 'receptionist':
         SystemMenus.receptionist_main_menu()
     elif user_data == 'admin':
@@ -53,9 +51,8 @@ if user_data:
                 salary = int(input("Enter Your Salary:\n"))
                 add_tutor(username, password, subject, level, salary)
             elif suboption == "2":
-                username = input("Enter The Tutor You Want To delet: ")
-                remove_user(username)
-                print("The tutor Has Been Successfully Deleted:")
+                username = input("Enter The Tutor You Want To delete: ")
+                print(remove_user(username))
         elif option == '2':
             SystemMenus.receptionist_management_menu()
             print("Select Your Option:\n")
@@ -65,6 +62,5 @@ if user_data:
                 password = input("Enter Your Password:\n")
                 add_receptionist(username, password)
             elif option == "2":
-                username = input("Enter The Receptionist you Want To Delet:\n")
-                remove_user(username)
-                print("The Receptionist Has Been Seccessfully Deleted")
+                username = input("Enter The Receptionist you Want To Delete:\n")
+                print(remove_user(username))

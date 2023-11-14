@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from datetime import datetime
 
 ROLES = {"admin", "receptionist", "tutor", "student"}
 
@@ -82,11 +83,12 @@ def remove_user(username: str = ''):
         elif role == "student":
             cursor.execute(f'DELETE FROM students WHERE name="{username}";')
         cursor.execute(f'DELETE FROM users WHERE username="{username}";')
+        database.commit()
+        database.close()
+        return "Deleted Successfully!"
     else:
-        return False
-
-    database.commit()
-    database.close()
+        database.close()
+        return "Doesn't exist!"
 
 
 def view_all(role=''):
@@ -114,7 +116,35 @@ def view_all_students(tutor=''):
     else:
         student_list = cursor.execute(f'SELECT name FROM students;').fetchall()
 
-    return [i[0] for i in student_list]
+    return str(*[i[0] for i in student_list])
+
+
+def update_tutor(tutor_name, new_subject='', new_level=0, new_salary=0):
+    database = sqlite3.connect('data.sqlite')
+    cursor = database.cursor()
+
+    if not validate_subjects(cursor, {new_subject}):
+        return "Please enter a valid subject"
+
+    tutor_exists = cursor.execute(f'SELECT * FROM tutors WHERE name="{tutor_name}";').fetchone()
+    if not tutor_exists:
+        return "Please check the tutor's name"
+
+    if new_subject:
+        cursor.execute(f'UPDATE tutors SET subject="{new_subject}" WHERE username="{tutor_name}";')
+    if new_level:
+        cursor.execute(f'UPDATE tutors SET level={new_level} WHERE username="{tutor_name}";')
+    if new_salary:
+        cursor.execute(f'UPDATE tutors SET salary={new_salary} WHERE username="{tutor_name}";')
+
+    database.commit()
+    return "Updated successfully"
+
+
+def add_class(tutor_name, title, time, place):
+    database = sqlite3.connect('data.sqlite')
+    cursor = database.cursor()
+    pass
 
 
 def change_profile(username, new_username='', new_password=''):
