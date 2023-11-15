@@ -94,7 +94,7 @@ def remove_user(username: str = ''):
 def view_all(role=''):
     database = sqlite3.connect('data.sqlite')
     cursor = database.cursor()
-    base_query = "SELECT username FROM users "
+    base_query = "SELECT * FROM users "
     if role:
         users = cursor.execute(base_query + f'WHERE role="{role}";').fetchall()
     else:
@@ -102,6 +102,14 @@ def view_all(role=''):
 
     database.close()
     return users
+
+
+def view_all_tutors():
+    database = sqlite3.connect("data.sqlite")
+    cursor = database.cursor()
+
+    tutors = cursor.execute("SELECT * FROM tutors;").fetchall()
+    return tutors
 
 
 def view_all_students(tutor=''):
