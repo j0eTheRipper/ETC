@@ -53,6 +53,10 @@ if user_data:
             elif suboption == "2":
                 username = input("Enter The Tutor You Want To delete: ")
                 print(remove_user(username))
+            elif suboption == "3":
+                tutor_list = view_all_tutors()
+                for tutor in tutor_list:
+                    print("name: " + tutor[0], "subject:" + tutor[1], "Level:" + str(tutor[2]), "Salary:" + str(tutor[3]))
         elif option == '2':
             SystemMenus.receptionist_management_menu()
             print("Select Your Option:\n")
@@ -64,3 +68,13 @@ if user_data:
             elif option == "2":
                 username = input("Enter The Receptionist you Want To Delete:\n")
                 print(remove_user(username))
+        elif option == "4":
+            print("Please Scelect Option:\n")
+            SystemMenus.sub_update_profile()
+            option = int(input("Enter input : "))
+            if option == 1:
+                new_username = input('Enter new username: ')
+                change_profile(userName, new_username=new_username)
+            elif option == 2:
+                new_password = input('Enter new password: ')
+                change_profile(userName, new_password=new_password)

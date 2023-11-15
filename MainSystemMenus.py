@@ -8,6 +8,7 @@ def admin_menu():
     print("****                 Admin Menu                      ****")
     print("1- Tutor Management")
     print("2- Reception Management")
+    print("4- update my profile")
 
 
 def tutor_management_menu():
@@ -15,6 +16,8 @@ def tutor_management_menu():
     print("****                 Tutor Menu                      ****")
     print("1- Register New Tutor")
     print("2- Delete Tutor")
+    print("3- view all tutors")
+
 
 
 def receptionist_management_menu():
