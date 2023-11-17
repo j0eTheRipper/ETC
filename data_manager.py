@@ -1,6 +1,5 @@
 import sqlite3
 import os
-from datetime import datetime
 
 ROLES = {"admin", "receptionist", "tutor", "student"}
 
@@ -124,10 +123,10 @@ def view_all_students(tutor=''):
     else:
         student_list = cursor.execute(f'SELECT name FROM students;').fetchall()
 
-    return str(*[i[0] for i in student_list])
+    return [i[0] for i in student_list]
 
 
-def update_tutor(tutor_name, new_subject='', new_level=0, new_salary=0):
+def update_tutor_info(tutor_name, new_subject='', new_level=0, new_salary=0):
     database = sqlite3.connect('data.sqlite')
     cursor = database.cursor()
 
@@ -149,16 +148,43 @@ def update_tutor(tutor_name, new_subject='', new_level=0, new_salary=0):
     return "Updated successfully"
 
 
-def add_class(tutor_name, title, time, place):
+def add_class(tutor_name, time):
     database = sqlite3.connect('data.sqlite')
     cursor = database.cursor()
-    pass
+
+    tutor, level, subject = (cursor.execute(f'SELECT name, level, subject FROM tutors WHERE name="{tutor_name}";').
+                             fetchone())
+
+    cursor.execute(f'INSERT INTO classes (subject, level, tutor, time) VALUES ("{subject}", {level}, "{tutor}", "{time}");')
+    database.commit()
+    database.close()
+
+
+def view_classes(username):
+    database = sqlite3.connect("data.sqlite")
+    cursor = database.cursor()
+
+    user_role = cursor.execute(f'SELECT role FROM users WHERE username="{username}";').fetchone()[0]
+    classes = []
+    if user_role == 'student':
+        student_info = cursor.execute(f'SELECT * FROM students WHERE name="{username}";').fetchone()
+        subjects = student_info[1].split("-")
+        for i in subjects:
+            classes.append(cursor.execute(f'SELECT * from classes WHERE level={student_info[2]} AND subject="{i}";').fetchall())
+    elif user_role == 'tutor':
+        return cursor.execute(f'SELECT * FROM classes WHERE tutor="{username}";').fetchall()
+    return classes
 
 
 def change_profile(username, new_username='', new_password=''):
     database = sqlite3.connect('data.sqlite')
     cursor = database.cursor()
+    user_role = cursor.execute(f'SELECT role FROM users WHERE username="{username}";').fetchone()[0]
     if new_username:
+        if user_role == 'student':
+            cursor.execute(f'UPDATE students SET name="{new_username}" WHERE name="{username}";')
+        elif user_role == 'tutor':
+            cursor.execute(f'UPDATE tutors SET name="{new_username}" WHERE name="{username}";')
         cursor.execute(f'UPDATE users SET username="{new_username}" WHERE username="{username}"')
     if new_password:
         cursor.execute(f'UPDATE users SET password="{new_password}" WHERE username="{username}"')
