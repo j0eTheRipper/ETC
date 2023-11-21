@@ -15,8 +15,21 @@ if user_data:
         match choice:
             case 1:
                 SystemMenus.sub_class_info()
+                t= int(input('Enter input: '))
+                if t == 1:
+                    print('--not yet--')
+                if t == 2:
+                    tutor_name= userName
+                    time= input('Enter class starting time (in 24H format): ')
+                    add_class(tutor_name, time)
+                    print('Successfully added.')
+                else:
+                    print('Input is 1 or 2 only.')
             case 2:
                 SystemMenus.sub_update_class()
+                c= int(input('Enter input: '))
+                if c == 1:
+                    view_classes(userName)
             case 3:
                 tutor = userName
                 print('Students under your subject: ')
