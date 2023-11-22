@@ -14,13 +14,28 @@ if user_data:
         choice = int(input('Please select an option: '))
         match choice:
             case 1:
-                SystemMenus.sub_class_info()
+                time = input('Enter class date and time (use dd/mm/yy hh:mm): ')
+                tutor_name = userName
+                add_class(tutor_name, time)
+                print('Class added successfully.')
             case 2:
                 SystemMenus.sub_update_class()
+                c= int(input('Enter input: '))
+                if c == 1:
+                   vclass= view_classes(userName)
+                   print('Your classes: ')
+                   print(*vclass, sep='\n')
+                if c == 2:
+                    print('Class updated.')
+                if c == 3:
+                    print('Class deleted.')
+                else:
+                    print('Input 1, 2, 3 only.')
             case 3:
                 tutor = userName
                 print('Students under your subject: ')
-                view_all_students(tutor)
+                allstudent = view_all_students(tutor)
+                print(*allstudent, sep='\n')
             case 4:
                 SystemMenus.sub_update_profile()
                 opt = int(input('Enter input: '))

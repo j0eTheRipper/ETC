@@ -42,14 +42,9 @@ def class_menu():
     print('5. Exit')
 
 
-def sub_class_info():
-    print('***********************************************')
-    print('1. Class title \n2. Set time and date')
-
-
 def sub_update_class():
     print('***********************************************')
-    print('1. Update Class \n2. Delete Class')
+    print(' 1. View Class \n2. Update Class \n3. Delete Class')
 
 def sub_update_profile():
     print('***********************************************')
