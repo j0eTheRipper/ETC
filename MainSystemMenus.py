@@ -1,6 +1,7 @@
 def login_menu():
     print("*********************************************************")
     print("****                  Login Page                     ****")
+    print("type exit() to exit")
 
 
 def admin_menu():
@@ -53,9 +54,12 @@ def sub_update_profile():
 def receptionist_main_menu():
     print('***********************************************')
     print('***            Receptionist Menu            ***')
-    print("""1) Add student
-    2) Remove student
-    3) View student requests
-    4) View student financial status
+    print("""
+    1) Add student_index
+    2) Remove student_index
+    3) View student_index requests
+    4) View student_index financial status
     5) Update profile
+    6) View All Students
+    0) exit program
     """)

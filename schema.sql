@@ -36,6 +36,10 @@ CREATE TABLE "students" (
 	"level"	INTEGER NOT NULL,
 	"ID"	TEXT NOT NULL UNIQUE,
 	"fees"	INTEGER,
+	"payment" INTEGER,
+	"pending_request" TEXT,
+	"accepted_requests" TEXT,
+	"denied_requests" TEXT,
 	FOREIGN KEY("name") REFERENCES "users"("username"),
 	PRIMARY KEY("ID")
 );
