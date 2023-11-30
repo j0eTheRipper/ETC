@@ -9,7 +9,9 @@ def admin_menu():
     print("****                 Admin Menu                      ****")
     print("1- Tutor Management")
     print("2- Reception Management")
-    print("4- update my profile")
+    print("3- update my profile")
+    print("4- view fees")
+    print("5- exit")
 
 
 def tutor_management_menu():
@@ -49,16 +51,16 @@ def sub_update_class():
 
 def sub_update_profile():
     print('***********************************************')
-    print('1. New username \n2. New Password')
+    print('1. New username \n2. New email\n3. New Password')
 
 def receptionist_main_menu():
     print('***********************************************')
     print('***            Receptionist Menu            ***')
     print("""
-    1) Add student_index
-    2) Remove student_index
-    3) View student_index requests
-    4) View student_index financial status
+    1) Add student
+    2) Remove student
+    3) View student requests
+    4) View student financial status
     5) Update profile
     6) View All Students
     0) exit program

@@ -1,5 +1,6 @@
 CREATE TABLE "users" (
 	"username"	TEXT NOT NULL UNIQUE,
+	"email" TEXT NOT NULL UNIQUE,
 	"password"	TEXT NOT NULL,
 	"role"	TEXT NOT NULL DEFAULT 'student',
 	PRIMARY KEY("username")
@@ -36,10 +37,8 @@ CREATE TABLE "students" (
 	"level"	INTEGER NOT NULL,
 	"ID"	TEXT NOT NULL UNIQUE,
 	"fees"	INTEGER,
-	"payment" INTEGER,
+	"payment_status" TEXT,
 	"pending_request" TEXT,
-	"accepted_requests" TEXT,
-	"denied_requests" TEXT,
 	FOREIGN KEY("name") REFERENCES "users"("username"),
 	PRIMARY KEY("ID")
 );
