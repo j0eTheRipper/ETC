@@ -47,7 +47,7 @@ def class_menu():
 
 def sub_update_class():
     print('***********************************************')
-    print(' 1. View Class \n2. Update Class \n3. Delete Class')
+    print('1. View Class \n2. Update Class \n3. Delete Class')
 
 def sub_update_profile():
     print('***********************************************')
