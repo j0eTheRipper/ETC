@@ -30,9 +30,23 @@ while user_data:
                     vclass = view_classes(userName)
                     print('Your classes: ')
                     print(*vclass, sep='\n')
-                if c == 2:
+                elif c == 2:
+                    vclass = view_classes(userName)
+                    print('Your classes: ')
+                    print(*vclass, sep='\n')
+                    print("------------------------------\n")
+                    class_id = int(input("Enter Class ID: "))
+                    new_date = input("Enter new class date and time (use dd/mm/yy hh:mm): ")
+                    update_class(class_id, new_date)
                     print('Class updated.')
-                if c == 3:
+                elif c == 3:
+                    vclass = view_classes(userName)
+                    print('Your classes: ')
+                    print(*vclass, sep='\n')
+                    print("------------------------------\n")
+                    class_id = int(input("Enter Class ID to be deleted: "))
+                    new_date = None
+                    update_class(class_id, new_date)
                     print('Class deleted.')
                 else:
                     print('Input 1, 2, 3 only.')
