@@ -105,6 +105,13 @@ def view_all_tutors():
     return tutors
 
 
+def get_subject(username):
+    database = sqlite3.connect("data.sqlite")
+    cursor = database.cursor()
+    stu_classes = cursor.execute(f'SELECT subjects FROM students WHERE name="{username}";').fetchone()[0]
+    return stu_classes
+
+
 def view_all_students(tutor=''):
     cursor, database = connect_to_db()
     student_list = []
@@ -126,7 +133,7 @@ def request_subject_change(name, subject, new_subject):
     cursor, database = connect_to_db()
     student = cursor.execute(f'SELECT * FROM students WHERE name="{name}";').fetchone()
     student_subjects = student[1].split("-")
-    student_has_pending_request = student[5]
+    student_has_pending_request = student[6]
     if student_has_pending_request:
         return "student has pending requests"
 
@@ -145,22 +152,16 @@ def view_subject_change_requests():
 
 def handle_pending_request(student, is_accept):
     cursor, database = connect_to_db()
-    current_subjects, pending_request, accepted_requests, denied_requests = cursor.execute(f'SELECT subjects, pending_request, accepted_requests, denied_requests FROM students WHERE name="{student}";').fetchone()
+    current_subjects, pending_request = cursor.execute(f'SELECT subjects, pending_request FROM students WHERE name="{student}";').fetchone()
     if is_accept:
         old_subject, new_subject = pending_request.split(">")
         current_subjects = current_subjects.split("-")
         current_subjects.remove(old_subject)
         current_subjects.append(new_subject)
         current_subjects = '-'.join(current_subjects)
-        print(pending_request)
-        if not accepted_requests:
-            accepted_requests = pending_request
-        else:
-            accepted_requests += "-" + pending_request
-        cursor.execute(f'UPDATE students SET subjects="{current_subjects}", pending_request=NULL, accepted_requests="{accepted_requests}" WHERE name="{student}";')
+        cursor.execute(f'UPDATE students SET subjects="{current_subjects}", pending_request=NULL WHERE name="{student}";')
     else:
-        denied_requests += "-" + pending_request
-        cursor.execute(f'UPDATE students SET pending_request=NULL, denied_requests="{denied_requests}" WHERE name="{student}";')
+        cursor.execute(f'UPDATE students SET pending_request=NULL, WHERE name="{student}";')
 
     database.commit()
     database.close()
@@ -169,16 +170,16 @@ def handle_pending_request(student, is_accept):
 def view_fees(username=""):
     cursor, database = connect_to_db()
     if username:
-        student_fees = cursor.execute(f'SELECT fees FROM students WHERE name="{username}";').fetchone()[0]
+        student_fees = cursor.execute(f'SELECT fees, payment_status FROM students WHERE name="{username}";').fetchone()
     else:
-        student_fees = cursor.execute(f'SELECT name, fees, payment FROM students;').fetchall()
+        student_fees = cursor.execute(f'SELECT name, fees, payment_status FROM students;').fetchall()
 
     return student_fees
 
 
 def pay_fees(username):
     cursor, database = connect_to_db()
-    cursor.execute(f'UPDATE students SET payment_status="pending" where name="{username}";')
+    cursor.execute(f'UPDATE students SET payment_status="pending" WHERE name="{username}";')
     database.commit()
     database.close()
 
@@ -216,7 +217,7 @@ def view_classes(username):
         student_info = cursor.execute(f'SELECT * FROM students WHERE name="{username}";').fetchone()
         subjects = student_info[1].split("-")
         for i in subjects:
-            classes.append(cursor.execute(f'SELECT * from classes WHERE level={student_info[2]} AND subject="{i}";').fetchall())
+            classes.append(cursor.execute(f'SELECT subject, tutor, time from classes WHERE level={student_info[2]} AND subject="{i}";').fetchall())
     elif user_role == 'tutor':
         return cursor.execute(f'SELECT * FROM classes WHERE tutor="{username}";').fetchall()
     return classes
@@ -301,5 +302,3 @@ def login(username, password):
     if user_info:
         if password == user_info[1]:
             return user_info[2]
-        return 'wrong password'
-    return 'wrong username'

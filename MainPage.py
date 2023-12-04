@@ -108,7 +108,7 @@ while user_data:
             students_fees = view_fees()
             for i, data in enumerate(students_fees):
                 name, fees, pending = data
-                print(f"{i}- {name} ${fees} (pending payment: {pending})")
+                print(f"{i}- {name} ${fees} (payment status: {pending})")
 
             student_index = int(input("enter the number of the student you want to accept thier payment (-1 to exit): "))
             if student_index == -1:
@@ -117,14 +117,66 @@ while user_data:
                 print("Doesn't exist")
                 continue
             else:
-                student_name = students_fees[student_index]
+                student_name = students_fees[student_index][0]
                 accept_payment(student_name)
         elif choice == '5':
             update_profile_interface(userName)
         elif choice == '6':
             print_all_students()
         elif choice == '0':
-            user_data = None
+            exit()
+    elif user_data == "student":
+        SystemMenus.student_menu()
+
+        stu_choice = input("Please select an option: \n")
+
+        if stu_choice == "1":
+            print("Your classes are: " "\n")
+            classes_list = view_classes(userName)
+            for classes in classes_list:
+                for class_ in classes:
+                    print("Class: ", class_[0], "\nTutor: ", class_[1], "\nDate&Time: ", class_[2])
+                    print()
+
+
+            BackTo_menu = input("\nPlease Enter (menu) to back: \n").lower()
+            print()
+            if BackTo_menu == "menu":
+                continue
+            else:
+                print("Wrong choice")
+
+        elif stu_choice == "2":
+            print()
+
+
+            stu_delete = input("Please chose the classes you want to delete: ")
+            stu_add = input("Please chose the you want to add: ")
+            view_classes(userName)
+
+            request_subject_change(userName,stu_delete,stu_add)
+
+        elif stu_choice == "3":
+            stu_delete_request = input("Enter the ")
+
+        elif stu_choice == "4":
+            fees, status = view_fees(userName)
+            if status == None:
+                print()
+                print(f"You need to pay {fees}")
+                print()
+                payment = input("Press Y if you want to pay fees: ").upper()
+                if payment == "Y":
+                    pay_fees(userName)
+            elif status == "pending":
+                print(f"Your payment is pending")
+            else:
+                print("You don't need to pay")
+        elif stu_choice == "5":
+            update_profile_interface(userName)
+            print("\n******  The profile has updated  ****** \n")
+        elif stu_choice == "0":
+            exit()
     elif user_data == 'admin':
         SystemMenus.admin_menu()
         print("Please Select Option:\n")
@@ -176,3 +228,5 @@ while user_data:
         elif option == '5':
             print("Goodbye")
             exit()
+else:
+    print('Please check your username and password')
