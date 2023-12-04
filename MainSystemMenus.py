@@ -78,11 +78,10 @@ def student_menu():
         0) exit program
         """)
 
-def fees_stu_menu():
-    print('***           Fees Menu            ***')
-    print("""
-        1) 
-        2) 
-        3) 
-        0) exit program
-        """)
+
+def student_subject_menu():
+    print('***            Student Subjects Menu            ***')
+    print(""" 
+    1) View me subjects
+    2) add new subjects 
+    """)
