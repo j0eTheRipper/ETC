@@ -1,6 +1,8 @@
 import MainSystemMenus as SystemMenus
 from common_functions import print_all_students, update_profile_interface
 from data_manager import *
+from receptionist_functions import register_student, delete_student, manage_student_subject_requests, \
+    manage_student_payments
 
 SystemMenus.login_menu()
 
@@ -12,6 +14,7 @@ except KeyboardInterrupt:
     exit()
 
 user_data = login(userName, password)
+
 
 while user_data:
     if user_data == 'tutor':
@@ -63,74 +66,23 @@ while user_data:
         SystemMenus.receptionist_main_menu()
         choice = input("please select an option: ")
         if choice == "1":
-            student_name = input("please enter the new student name: ")
-            student_email = input("please enter the new student's email: ")
-            student_password = input("please enter the new student's password: ")
-            student_IC = input("Please enter the new student's IC number: ")
-            print("please enter 3 subjects for the student:")
-            subjects = set([input(f'Subject {i}: ') for i in range(1, 4)])
-            level = int(input("please enter the student's level: "))
-            fees = level * 1000
-
-            add_student(student_name, student_email, student_password, subjects, level, student_IC, fees)
-            print(f"added new student: {student_name} successfully!")
+            register_student()
         elif choice == '2':
-            student_list = print_all_students()
-            student_number = int(input("please enter the number of the student you want to delete: ")) - 1
-            deletion_confirmation = input("Are you sure you want to delete this student: (N/Y): ")
-            if deletion_confirmation == "Y":
-                remove_user(student_list[student_number])
-                print("deleted successfully")
-            else:
-                print("Cancelled!")
+            delete_student()
         elif choice == '3':
-            all_requests = view_subject_change_requests(userName)
-            for index, data in enumerate(all_requests):
-                name, request = data
-                print(f'{index}- {name} ==> {request}')
-
-            student_index = int(input("please enter the number of the request you want to handle (-1 to exit): "))
-            if student_index == -1 or student_index >= len(all_requests):
-                continue
-
-            student_request = all_requests[student_index]
-            name = student_request[0]
-            old_subject, new_subject = student_request[1].old_subjects(">")
-            print(f'{name} would like to change from {old_subject} to {new_subject}')
-            accept_deny = input("do you aproove of this change? [n, y]: ")
-            if 'y' in accept_deny:
-                handle_pending_request(name, True)
-                print("accepted successfully!")
-            else:
-                handle_pending_request(name, False)
-                print("request denied")
+            manage_student_subject_requests(userName)
         elif choice == '4':
-            students_fees = view_fees()
-            for i, data in enumerate(students_fees):
-                name, fees, pending = data
-                print(f"{i}- {name} ${fees} (payment status: {pending})")
-
-            student_index = int(input("enter the number of the student you want to accept thier payment (-1 to exit): "))
-            if student_index == -1:
-                continue
-            elif student_index >= len(students_fees):
-                print("Doesn't exist")
-                continue
-            else:
-                student_name = students_fees[student_index][0]
-                accept_payment(student_name)
+            manage_student_payments()
         elif choice == '5':
             update_profile_interface(userName)
         elif choice == '6':
             print_all_students()
         elif choice == '0':
             exit()
-#STUDENT LOOP
+        input("Enter to continue...")
     elif user_data == "student":
         SystemMenus.student_menu()
-
         stu_choice = input("Please select an option: \n")
-
         if stu_choice == "1":
             print("Your classes are: " "\n")
             classes_list = view_classes(userName)
@@ -138,8 +90,6 @@ while user_data:
                 for class_ in classes:
                     print("Class: ", class_[0], "\nTutor: ", class_[1], "\nDate&Time: ", class_[2])
                     print()
-
-
             BackTo_menu = input("\nPlease Enter (menu) to back: \n").lower()
             print()
             if BackTo_menu == "menu":
@@ -171,22 +121,17 @@ while user_data:
 
         elif stu_choice == "3":
             stu_request = view_subject_change_requests(userName)[0][1]
-            if stu_request != None:
-                stu_delete_ = input(f"Your request change is {stu_request}\n\nPress Y if you want to delete the request: ").upper()
+            if stu_request is not None:
+                stu_delete_ = input(
+                    f"Your request change is {stu_request}\n\nPress Y if you want to delete the request: ").upper()
                 if stu_delete_ == "Y":
                     handle_pending_request(userName, False)
-                    print("\nRequest has deleted")
-            elif stu_request == None:
-                print("\nYou didn't send any request!")
-            elif stu_request > 1:
-                print("\nWait for the pending!")
+                    print("\nRequest has been deleted")
             else:
-                print("\nSorry you cannot delete, The request has been accepted!")
-
-
+                print("\nYou have no pending requests.")
         elif stu_choice == "4":
             fees, status = view_fees(userName)
-            if status == None:
+            if status is None:
                 print(f"\nYou need to pay {fees}\n")
                 payment = input("Press Y if you want to pay fees: ").upper()
                 if payment == "Y":
@@ -209,7 +154,6 @@ while user_data:
             print("Please Select Option:\n")
             suboption = input()
             if suboption == "1":
-                # UserList = view_all()
                 username = input("Enter new tutor username:\n")
                 email = input("Enter the new tutor's email: \n")
                 password = input("Enter new tutor password:\n")
