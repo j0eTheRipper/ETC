@@ -79,9 +79,3 @@ def student_menu():
         """)
 
 
-def student_subject_menu():
-    print('***            Student Subjects Menu            ***')
-    print(""" 
-    1) View me subjects
-    2) add new subjects 
-    """)

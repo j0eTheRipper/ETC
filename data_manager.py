@@ -144,9 +144,13 @@ def request_subject_change(name, subject, new_subject):
     database.close()
 
 
-def view_subject_change_requests():
+def view_subject_change_requests(username):
     cursor, database = connect_to_db()
-    pending_requests = cursor.execute('SELECT name, pending_request FROM students;').fetchall()
+    role = cursor.execute(f'select role from users where username="{username}";').fetchone()
+    if role == "student":
+        pending_requests = cursor.execute(f'SELECT name, pending_request FROM students WHERE username="{username}";').fetchall()
+    else:
+        pending_requests = cursor.execute('SELECT name, pending_request FROM students;').fetchall()
     return pending_requests
 
 
@@ -161,7 +165,7 @@ def handle_pending_request(student, is_accept):
         current_subjects = '-'.join(current_subjects)
         cursor.execute(f'UPDATE students SET subjects="{current_subjects}", pending_request=NULL WHERE name="{student}";')
     else:
-        cursor.execute(f'UPDATE students SET pending_request=NULL, WHERE name="{student}";')
+        cursor.execute(f'UPDATE students SET pending_request=NULL WHERE name="{student}";')
 
     database.commit()
     database.close()
@@ -302,3 +306,19 @@ def login(username, password):
     if user_info:
         if password == user_info[1]:
             return user_info[2]
+
+
+def other_subjects(subjects):
+    database = sqlite3.connect("data.sqlite")
+    cursor = database.cursor()
+    subjects_not_use = []
+
+    subjects_ = cursor.execute(f"SELECT * FROM subjects").fetchall()
+    for i in subjects_:
+        if i[0] not in subjects:
+            subjects_not_use.append(i[0])
+
+    return subjects_not_use
+
+
+
