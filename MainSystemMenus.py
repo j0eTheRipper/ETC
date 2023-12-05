@@ -65,3 +65,17 @@ def receptionist_main_menu():
     6) View All Students
     0) exit program
     """)
+
+
+def student_menu():
+    print('***            Student Menu            ***')
+    print("""
+        1) View classes
+        2) Request Change subject
+        3) Delete pending request
+        4) Pay fees
+        5) Update profile
+        0) exit program
+        """)
+
+
