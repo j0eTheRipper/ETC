@@ -1,6 +1,8 @@
 from common_functions import print_all_students
-from data_manager import add_student, remove_user, view_subject_change_requests, handle_pending_request, view_fees, \
+from data_manager.data_manager import view_subject_change_requests, handle_pending_request, view_fees, \
     accept_payment
+from data_manager.user_functions.user_management import remove_user
+from data_manager.user_functions.add_by_role import add_student
 
 
 def register_student():

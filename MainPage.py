@@ -1,22 +1,33 @@
 import MainSystemMenus as SystemMenus
 from common_functions import print_all_students, update_profile_interface
-from data_manager import *
+from data_manager.data_manager import *
+from data_manager.user_functions.user_management import login, remove_user
+from data_manager.user_functions.add_by_role import add_tutor, add_receptionist
 from receptionist_functions import register_student, delete_student, manage_student_subject_requests, \
     manage_student_payments
+from os import system
 
 SystemMenus.login_menu()
 
-try:
-    userName = input("Enter Your Username:\n")
-    password = input("Enter Your Password:\n")
-except KeyboardInterrupt:
-    print("goodbye")
-    exit()
+x = 0
+user_data = None
+while x < 3 and not user_data:
+    try:
+        prompt = input("Enter Your Username or email:\n")
+        password = input("Enter Your Password:\n")
+    except KeyboardInterrupt:
+        print("goodbye")
+        exit()
 
-user_data = login(userName, password)
+    if "@" in prompt:
+        user_data, userName = login(password, email=prompt)
+    else:
+        user_data, userName = login(password, username=prompt)
+    x += 1
 
 
 while user_data:
+    system("cls")
     if user_data == 'tutor':
         SystemMenus.class_menu()
         choice = int(input('Please select an option: '))
@@ -61,7 +72,7 @@ while user_data:
             case 4:
                 update_profile_interface(userName)
             case 5:
-                user_data = None
+                exit()
     elif user_data == 'receptionist':
         SystemMenus.receptionist_main_menu()
         choice = input("please select an option: ")

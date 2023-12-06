@@ -1,101 +1,8 @@
 import sqlite3
 import os
-import re
 
-ROLES = {"admin", "receptionist", "tutor", "student"}
-
-
-def __generate_new_user_query(username: str, email: str, password: str, role: str):
-    role = role.lower()
-    if role not in ROLES:
-        print("role invalid!")
-        return
-
-    username = ''.join(username.lower().split())
-    try:
-        email = re.match(r"^[a-z]+@[a-z]+\.[a-z]+", email).group()
-    except AttributeError:
-        raise ValueError
-
-    return f'INSERT INTO users (username, email, password, role) VALUES ("{username}", "{email}", "{password}", "{role}");', username
-
-
-def add_student(username: str, email: str, password: str, subjects: set, level: int, icad: str, fees: int = 0):
-    """adds a new student. used by receptionist"""
-    if len(subjects) > 3:
-        print("Up to 3 subjects allowed!")
-        return
-
-    cursor, database = connect_to_db()
-    if not validate_subjects(cursor, subjects):
-        return
-
-    new_user = __generate_new_user_query(username, email, password, "student")
-    new_student = f'INSERT INTO students (name, ID, subjects, level, fees) \
-    VALUES ("{new_user[1]}", "{icad}", "{"-".join(list(subjects))}", {level}, {fees});'
-    cursor.execute(new_user[0])
-    cursor.execute(new_student)
-    database.commit()
-    database.close()
-
-
-def validate_subjects(cursor, subjects):
-    valid_subjects = set(map(lambda a: a[0], cursor.execute("SELECT * FROM subjects;").fetchall()))
-    if (subjects & valid_subjects) != subjects:
-        print("some of the subjects selected are invalid")
-        return
-    return True
-
-
-def add_tutor(username, email, password, assigned_subject, level, salary):
-    """Adds a new tutor. Used by receptionist"""
-    cursor, database = connect_to_db()
-
-    if not validate_subjects(cursor, {assigned_subject}):
-        return
-
-    try:
-        query = __generate_new_user_query(username, email, password, "tutor")
-    except ValueError:
-        print("Please enter a valid email format example@mail.domain")
-        return
-
-    new_user, username = query
-    new_tutor = f'INSERT INTO tutors (name, subject, level, salary) VALUES ("{username}", "{assigned_subject}", {level}, {salary});'
-    cursor.execute(new_user)
-    cursor.execute(new_tutor)
-    database.commit()
-    database.close()
-
-
-def add_receptionist(username, email, password: str):
-    """Adds new receptionist to the database. Used by admin"""
-    new_user, _ = __generate_new_user_query(username, email, password, "receptionist")
-    cursor, database = connect_to_db()
-    cursor.execute(new_user)
-    database.commit()
-    database.close()
-
-
-def remove_user(username: str = ''):
-    """deletes user from the database."""
-    cursor, database = connect_to_db()
-
-    role = cursor.execute(f'SELECT role FROM users WHERE username="{username}";').fetchone()
-    if role:
-        role = role[0]
-        if role == "tutor":
-            cursor.execute(f'DELETE FROM classes WHERE tutor="{username}";')
-            cursor.execute(f'DELETE FROM tutors WHERE name="{username}";')
-        elif role == "student":
-            cursor.execute(f'DELETE FROM students WHERE name="{username}";')
-        cursor.execute(f'DELETE FROM users WHERE username="{username}";')
-        database.commit()
-        database.close()
-        return "Deleted Successfully!"
-    else:
-        database.close()
-        return "Doesn't exist!"
+from data_manager.common_f import connect_to_db
+from data_manager.user_functions.user_management import __generate_new_user_query
 
 
 def view_all_tutors():
@@ -117,7 +24,7 @@ def view_all_students(tutor=''):
     student_list = []
 
     if tutor:
-        tutor_info = cursor.execute(f'SELECT subjects, level FROM tutors WHERE name="{tutor}";').fetchone()
+        tutor_info = cursor.execute(f'SELECT subject, level FROM tutors WHERE name="{tutor}";').fetchone()
         subjects = tutor_info[0].split("-")
         level = tutor_info[1]
         for subject in subjects:
@@ -206,12 +113,6 @@ def add_class(tutor_name, time):
     database.close()
 
 
-def connect_to_db():
-    database = sqlite3.connect("data.sqlite")
-    cursor = database.cursor()
-    return cursor, database
-
-
 def view_classes(username):
     cursor, database = connect_to_db()
 
@@ -225,29 +126,6 @@ def view_classes(username):
     elif user_role == 'tutor':
         return cursor.execute(f'SELECT * FROM classes WHERE tutor="{username}";').fetchall()
     return classes
-
-
-def change_profile(username, new_username='', new_password='', new_email=''):
-    cursor, database = connect_to_db()
-    user_role = cursor.execute(f'SELECT role FROM users WHERE username="{username}";').fetchone()[0]
-    if new_username:
-        if user_role == 'student':
-            cursor.execute(f'UPDATE students SET name="{new_username}" WHERE name="{username}";')
-        elif user_role == 'tutor':
-            cursor.execute(f'UPDATE tutors SET name="{new_username}" WHERE name="{username}";')
-        cursor.execute(f'UPDATE users SET username="{new_username}" WHERE username="{username}"')
-    if new_password:
-        cursor.execute(f'UPDATE users SET password="{new_password}" WHERE username="{username}"')
-    if new_email:
-        try:
-            email = re.match(r"^[a-z]+@[a-z]+\.[a-z]+", new_email).group()
-        except AttributeError:
-            return 'please enter a valid email'
-
-        cursor.execute(f'UPDATE users SET email="{email}" WHERE username="{username}"')
-
-    database.commit()
-    database.close()
 
 
 def update_class(class_id, new_date=None):
@@ -278,7 +156,7 @@ def init_db():
         os.remove("data.sqlite")
 
     cursor, database = connect_to_db()
-    with open('schema.sql', 'r') as schema:
+    with open('data_manager\\schema.sql', 'r') as schema:
         script = schema.read()
     cursor.executescript(script)
 
@@ -286,7 +164,7 @@ def init_db():
     for subject in default_subjects:
         cursor.execute(f'INSERT INTO subjects VALUES ("{subject}");')
 
-    new_user = __generate_new_user_query("defaultadmin", "admin@etc.mail" ,"pleasechange123", "admin")[0]
+    new_user = __generate_new_user_query("defaultadmin", "admin@etc.mail", "pleasechange123", "admin")[0]
     cursor.execute(new_user)
     database.commit()
     database.close()
@@ -296,16 +174,6 @@ def init_db():
     username: defaultadmin
     password: pleasechange123
     """)
-
-
-def login(username, password):
-    """Returns the user's role if the password was correct. otherwise returns 'wrong password'"""
-    cursor, database = connect_to_db()
-    username = ''.join(username.lower())
-    user_info = cursor.execute(f'SELECT username, password, role FROM users WHERE username="{username}"').fetchone()
-    if user_info:
-        if password == user_info[1]:
-            return user_info[2]
 
 
 def other_subjects(subjects):

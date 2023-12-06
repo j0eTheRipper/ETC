@@ -1,5 +1,6 @@
 import MainSystemMenus as SystemMenus
-from data_manager import view_all_students, change_profile
+from data_manager.data_manager import view_all_students
+from data_manager.user_functions.user_management import change_profile
 
 
 def print_all_students():
