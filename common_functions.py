@@ -1,5 +1,5 @@
 import MainSystemMenus as SystemMenus
-from data_manager.data_manager import view_all_students
+from data_manager.user_functions.role_specific_functions import view_all_students
 from data_manager.user_functions.user_management import change_profile
 
 

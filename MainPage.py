@@ -1,8 +1,12 @@
 import MainSystemMenus as SystemMenus
 from common_functions import print_all_students, update_profile_interface
-from data_manager.data_manager import *
+from data_manager.class_functions import *
+from data_manager.fees_functions import view_fees, pay_fees, view_income
+from data_manager.subject_functions import get_subject, request_subject_change, view_subject_change_requests, \
+    handle_subject_request, other_subjects
 from data_manager.user_functions.user_management import login, remove_user
-from data_manager.user_functions.add_by_role import add_tutor, add_receptionist
+from data_manager.user_functions.role_specific_functions import add_tutor, add_receptionist, view_all_tutors, \
+    view_all_students
 from receptionist_functions import register_student, delete_student, manage_student_subject_requests, \
     manage_student_payments
 from os import system
@@ -12,6 +16,8 @@ SystemMenus.login_menu()
 x = 0
 user_data = None
 while x < 3 and not user_data:
+    if x > 0:
+        print("please check your username and password")
     try:
         prompt = input("Enter Your Username or email:\n")
         password = input("Enter Your Password:\n")
@@ -20,9 +26,12 @@ while x < 3 and not user_data:
         exit()
 
     if "@" in prompt:
-        user_data, userName = login(password, email=prompt)
+        user_data = login(password, email=prompt)
     else:
-        user_data, userName = login(password, username=prompt)
+        user_data = login(password, username=prompt)
+
+    if user_data:
+        user_data, userName = user_data
     x += 1
 
 
@@ -90,7 +99,6 @@ while user_data:
             print_all_students()
         elif choice == '0':
             exit()
-        input("Enter to continue...")
     elif user_data == "student":
         SystemMenus.student_menu()
         stu_choice = input("Please select an option: \n")
@@ -136,7 +144,7 @@ while user_data:
                 stu_delete_ = input(
                     f"Your request change is {stu_request}\n\nPress Y if you want to delete the request: ").upper()
                 if stu_delete_ == "Y":
-                    handle_pending_request(userName, False)
+                    handle_subject_request(userName, False)
                     print("\nRequest has been deleted")
             else:
                 print("\nYou have no pending requests.")
@@ -206,5 +214,5 @@ while user_data:
         elif option == '5':
             print("Goodbye")
             exit()
-else:
-    print('Please check your username and password')
+
+    input("Enter to continue...")

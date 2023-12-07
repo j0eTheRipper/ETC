@@ -1,6 +1,7 @@
+import os
 import re
 
-from data_manager.common_f import connect_to_db
+from data_manager import connect_to_db
 
 ROLES = {"admin", "receptionist", "tutor", "student"}
 
@@ -13,7 +14,7 @@ def __generate_new_user_query(username: str, email: str, password: str, role: st
 
     username = ''.join(username.lower().split())
     try:
-        email = re.match(r"^[a-z]+@[a-z]+\.[a-z]+", email).group()
+        email = re.match(r"^[A-Za-z0-9]+@[a-z]+\.[a-z]+", email).group()
     except AttributeError:
         raise ValueError
 
@@ -100,3 +101,27 @@ def validate_subjects(cursor, subjects):
     return True
 
 
+def initialize_admin():
+    """Deletes the current database and creates a new one, and makes a default admin account"""
+    if os.path.exists("data.sqlite"):
+        os.remove("data.sqlite")
+
+    cursor, database = connect_to_db()
+    with open('data_manager\\schema.sql', 'r') as schema:
+        script = schema.read()
+    cursor.executescript(script)
+
+    default_subjects = {"english", "computer", "bahasa", "math", "physics", "chemistry", "biology"}
+    for subject in default_subjects:
+        cursor.execute(f'INSERT INTO subjects VALUES ("{subject}");')
+
+    new_user = __generate_new_user_query("defaultadmin", "admin@etc.mail", "pleasechange123", "admin")[0]
+    cursor.execute(new_user)
+    database.commit()
+    database.close()
+    print("done executing the script!")
+    print("""
+    Admin details:
+    username: defaultadmin
+    password: pleasechange123
+    """)
