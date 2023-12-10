@@ -41,7 +41,7 @@ def add_tutor(username, email, password, assigned_subject, level, salary):
 def add_receptionist(username, email, password: str):
     """Adds new receptionist to the database. Used by admin"""
     try:
-        query = __generate_new_user_query(username, email, password, "tutor")
+        query = __generate_new_user_query(username, email, password, "receptionist")
     except ValueError:
         print("Please enter a valid email format example@mail.domain")
         return
