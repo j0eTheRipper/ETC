@@ -1,7 +1,7 @@
 def login_menu():
     print("*********************************************************")
     print("****                  Login Page                     ****")
-    print("type exit() to exit")
+    print("type press ctrl + C to exit")
 
 
 def admin_menu():

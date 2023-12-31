@@ -80,10 +80,11 @@ def manage_student_payments():
     students_fees = view_fees()
     for i, data in enumerate(students_fees):
         name, fees, pending = data
-        print(f"{i}- {name} ${fees} (payment status: {pending})")
+        if pending:
+            print(f"{i}- {name} ${fees} (payment status: {pending})")
 
     try:
-        student_index = int(input("please enter the number of the request you want to handle (-1 to exit): "))
+        student_index = int(input("please enter the number of the students you want to mark as completed (-1 to exit): "))
     except ValueError:
         return
 
@@ -92,3 +93,9 @@ def manage_student_payments():
 
     student_name = students_fees[student_index][0]
     accept_payment(student_name)
+    print(f"""
+    ================ RECEIPT ===================
+    name: {student_name}
+    ammount paid: {students_fees[student_index]}
+    ============================================
+    """)

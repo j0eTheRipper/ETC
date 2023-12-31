@@ -4,14 +4,18 @@ from data_manager.class_functions import *
 from data_manager.fees_functions import view_fees, pay_fees, view_income
 from data_manager.subject_functions import get_subject, request_subject_change, view_subject_change_requests, \
     handle_subject_request, other_subjects
-from data_manager.user_functions.user_management import login, remove_user
+from data_manager.user_functions.user_management import login, remove_user, initialize_admin
 from data_manager.user_functions.role_specific_functions import add_tutor, add_receptionist, view_all_tutors, \
     view_all_students
 from receptionist_functions import register_student, delete_student, manage_student_subject_requests, \
     manage_student_payments
 from os import system
+from os.path import exists
 
 SystemMenus.login_menu()
+
+if not exists("data.sqlite"):
+    initialize_admin()
 
 x = 0
 user_data = None
@@ -43,8 +47,7 @@ while user_data:
         match choice:
             case 1:
                 time = input('Enter class date and time (use dd/mm/yy hh:mm): ')
-                tutor_name = userName
-                add_class(tutor_name, time)
+                add_class(userName, time)
                 print('Class added successfully.')
             case 2:
                 SystemMenus.sub_update_class()
@@ -211,6 +214,8 @@ while user_data:
                 print(f"total student fees payed: {student_fees} RM")
             elif option == '2':
                 print(f"total salaries payed: {salaries} RM")
+            elif option == '3':
+                print(f'total income: {student_fees - salaries}')
         elif option == '5':
             print("Goodbye")
             exit()
