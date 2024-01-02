@@ -197,7 +197,7 @@ while user_data:
             option = input()
             if option == "1":
                 username = input("Enter the receptionist's User Name:\n")
-                email = input("enter the receptionist's email: ")
+                email = input("enter the receptionist's email , example@mail.domain: ")
                 password = input("Enter the receptionist's password Password:\n")
                 add_receptionist(username, email, password)
             elif option == "2":
